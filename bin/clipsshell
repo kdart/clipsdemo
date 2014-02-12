@@ -1,0 +1,12 @@
+#!/usr/bin/python2.7
+# -*- coding: utf-8 -*-
+# vim:ts=4:sw=4:softtabstop=4:smarttab:expandtab
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+from __future__ import division
+
+from clipsdemo import shell
+
+shell.Shell().run()
+

@@ -1,0 +1,205 @@
+#:import os os
+
+<BoxLayout>:
+    padding: [5]
+
+<VerticalLayout@BoxLayout>:
+    padding: [5]
+    orientation: 'vertical'
+
+<HorizontalLayout@BoxLayout>:
+    padding: [5]
+    orientation: 'horizontal'
+
+<Output@TextInput>:
+    readonly: True
+    size_hint: 1, None
+
+<OutLabel@Label>:
+    halign: "right"
+    valign: "top"
+    size_hint: None, 0.1
+
+<StateLabel@Label>:
+    valign: "middle"
+    font_size: 14
+    size_hint: None, 0.1
+
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+            filters: [r"*.clp"]
+            path: os.getcwdu()
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: app.dismiss_popup()
+            Button:
+                text: "Load"
+                on_release: app.load(filechooser.path, filechooser.selection)
+
+<SaveDialog>:
+    text_input: text_input
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+            path: os.getcwdu()
+            on_selection: text_input.text = self.selection and self.selection[0] or ''
+        TextInput:
+            id: text_input
+            size_hint_y: None
+            height: 30
+            multiline: False
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: app.dismiss_popup()
+            Button:
+                text: "Save"
+                on_release: app.save(filechooser.path, text_input.text)
+
+
+<ReadDialog@FloatLayout>:
+    read_input: read_input
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        TextInput:
+            id: read_input
+            multiline: False
+            focus: True
+        Button:
+            text: "OK"
+            size_hint: 0.1, 0.8
+            on_release: app._readdone(read_input.text)
+
+
+VerticalLayout:
+    GridLayout:
+        row_force_default: True
+        row_default_height: 40
+        cols: 9
+        rows: 2
+        size_hint: 0.2, None
+        Button:
+            text: "Eval"
+            on_press: app.do_eval()
+            background_color: .1, .9, 0.1, 1
+            size_hint: None, 0.1
+        Button:
+            text: "Run"
+            on_press: app.do_run()
+            background_color: .1, .8, 0.1, 1
+            size_hint: None, 0.1
+        Button:
+            text: "Step"
+            on_press: app.do_step()
+            background_color: .1, .6, 0.1, 1
+            size_hint: None, 0.1
+        Button:
+            text: "Update"
+            on_press: app.do_update()
+            background_color: .1, .6, 0.6, 1
+            size_hint: None, 0.1
+        Button:
+            text: "Reset"
+            on_press: app.do_reset()
+            background_color: .1, .8, 0.8, 1
+            size_hint: None, 0.1
+        Button:
+            text: "Clear"
+            on_press: app.do_clear()
+            background_color: .8, .2, 0.2, 1
+            size_hint: None, 0.1
+        Button:
+            text: "Batch"
+            on_press: app.do_batch()
+            background_color: .9, .9, 0.1, 1
+            size_hint: None, 0.1
+        Button:
+            text: "Load"
+            on_press: app.do_load()
+            background_color: .9, .9, 0.1, 1
+            size_hint: None, 0.1
+        Button:
+            text: "Save"
+            on_press: app.do_save()
+            background_color: .9, .9, 0.1, 1
+            size_hint: None, 0.1
+        HorizontalLayout:
+            StateLabel:
+                text: "Actions:"
+            StateLabel:
+                id: state1
+                text: "state1"
+            StateLabel:
+                id: state2
+                text: "state2"
+            StateLabel:
+                id: state3
+                text: "state3"
+            StateLabel:
+                id: state4
+                text: "state4"
+    VerticalLayout:
+        ClipsInput:
+            id: program
+            multiline: True
+            focus: True
+        HorizontalLayout:
+            OutLabel:
+                text: "Stdout:"
+            ScrollView:
+                id: outscrlv
+                Output:
+                    id: stdout
+                    height: max(self.minimum_height, outscrlv.height)
+        HorizontalLayout:
+            OutLabel:
+                text: "Display:"
+            ScrollView:
+                id: dispscrlv
+                Output:
+                    id: display
+                    height: max(self.minimum_height, dispscrlv.height)
+        HorizontalLayout:
+            OutLabel:
+                text: "Trace:"
+            ScrollView:
+                id: trcscrlv
+                Output:
+                    id: trace
+                    height: max(self.minimum_height, trcscrlv.height)
+                    background_color: .1, .8, 0.9, 1
+        HorizontalLayout:
+            OutLabel:
+                text: "Warning:"
+            ScrollView:
+                id: warnscrlv
+                Output:
+                    id: warnings
+                    height: max(self.minimum_height, warnscrlv.height)
+                    background_color: .9, .7, 0.1, 1
+        HorizontalLayout:
+            OutLabel:
+                text: "Errors:"
+            ScrollView:
+                id: errscrlv
+                Output:
+                    id: errors
+                    background_color: .8, .1, 0.1, 1
+                    height: max(self.minimum_height, errscrlv.height)
+
