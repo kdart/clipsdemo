@@ -30,6 +30,7 @@ from __future__ import division
 
 import sys
 import os
+import time
 
 import kivy
 kivy.require("1.8.0")
@@ -44,6 +45,9 @@ from kivy.uix.popup import Popup
 
 from .lexer import JessLexer # At least close to clips syntax
 
+
+def _now():
+    return clips.Float(time.time())
 
 class ClipsInput(CodeInput):
     def __init__(self, *args, **kwargs):
@@ -88,7 +92,7 @@ class ClipsDemoApp(App):
         clips.RegisterPythonFunction(self._resetstate3, "resetstate3")
         clips.RegisterPythonFunction(self._setstate4, "setstate4")
         clips.RegisterPythonFunction(self._getstate4, "getstate4")
-        clips.RegisterPythonFunction(self._resetstate4, "resetstate4")
+        clips.RegisterPythonFunction(_now, "now")
         #clips.RegisterPythonFunction(self.do_read, "read")
 
     def _setstate(self, num, args):
@@ -309,6 +313,7 @@ def _buildfunctions():
     clips.BuildFunction("setstate4", "?text", '(python-call setstate4 ?text)')
     clips.BuildFunction("getstate4", None, '(python-call getstate4)')
     clips.BuildFunction("resetstate4", None, '(python-call resetstate4)')
+    clips.BuildFunction("now", None, '(python-call now)')
     #clips.BuildFunction("read", None, '(python-call read)')
 
 def main(argv):
